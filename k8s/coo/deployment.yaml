@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coo-deployment
+  labels:
+    app: coo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coo
+  template:
+    metadata:
+      labels:
+        app: coo
+    spec:
+      containers:
+        - name: coo
+          image: iota-on-k8s-coo
+          imagePullPolicy: Never
+          ports:
+          - name: gossip
+            containerPort: 15600
+          - name: rest-api
+            containerPort: 14265
+          - name: autopeering
+            containerPort: 14626
+            protocol: UDP
+          - name: dashboard
+            containerPort: 8081
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            
+
+
+

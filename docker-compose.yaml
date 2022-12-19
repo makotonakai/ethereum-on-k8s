@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  coo:
+    container_name: iota-coo
+    build:
+      context: ./coo
+      dockerfile: Dockerfile
+    platform: linux/x86_64
+    ports:
+      - 0.0.0.0:15600:15600
+      - 0.0.0.0:14265:14265
+      - 0.0.0.0:14626:14626/udp
+      - 0.0.0.0:8081:8081
+    networks:
+      iota-network:
+        ipv4_address: 192.168.96.2
+
+  node:
+    container_name: iota-node
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    platform: linux/x86_64
+    ports:
+      - 0.0.0.0:15601:15601
+      - 0.0.0.0:14266:14266
+      - 0.0.0.0:14627:14627/udp
+      - 0.0.0.0:8082:8082
+    networks:
+      iota-network:
+        ipv4_address: 192.168.96.3
+
+  registry:
+    image: registry:2
+    platform: linux/x86_64
+    ports:
+      - 0.0.0.0:5000:5000
+
+networks:
+  iota-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.96.0/24
+  
